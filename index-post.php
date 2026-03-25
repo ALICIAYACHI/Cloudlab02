@@ -2,14 +2,24 @@
 include("conexion.php");
 $con = conexion();
 
-$doc = $_POST["doc"];
-$nom = $_POST["nom"];
-$ape = $_POST["ape"];
-$dir = $_POST["dir"];
-$cel = $_POST["cel"];
+$doc = trim($_POST["doc"]);
+$nom = trim($_POST["nom"]);
+$ape = trim($_POST["ape"]);
+$dir = trim($_POST["dir"]);
+$cel = preg_replace('/\D/', '', trim($_POST["cel"])); // elimina todo lo que no sea dígito
 
-$sql = "insert into persona values(default,'$doc','$nom','$ape','$dir','$cel')";
-pg_query($con, $sql);
+// Validación básica: evita insertar vacíos
+if (empty($doc) || empty($nom) || empty($ape)) {
+    die("Error: Documento, Nombre y Apellidos son obligatorios.");
+}
+
+$sql = "INSERT INTO persona VALUES(default,'$doc','$nom','$ape','$dir','$cel')";
+$result = pg_query($con, $sql);
+
+if (!$result) {
+    die("Error al insertar: " . pg_last_error($con));
+}
 
 header("location:index.php");
+exit();
 ?>
