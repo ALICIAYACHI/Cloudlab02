@@ -11,10 +11,9 @@ if ($busqueda !== '') {
             nom ILIKE '%$busqueda%' OR 
             ape ILIKE '%$busqueda%' OR 
             dir ILIKE '%$busqueda%' OR 
-            cel ILIKE '%$busqueda%'
-            ORDER BY id ASC";
+            cel ILIKE '%$busqueda%'";
 } else {
-    $sql = "SELECT * FROM persona ORDER BY id ASC";
+    $sql = "SELECT * FROM persona";
 }
 
 $result = pg_query($con, $sql);
