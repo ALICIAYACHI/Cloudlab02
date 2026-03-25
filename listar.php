@@ -413,16 +413,15 @@ $total = pg_num_rows($result);
       </thead>
       <tbody>
         <?php
+        // Función definida UNA sola vez, fuera del loop
+        function resaltar($texto, $busq) {
+          if ($busq === '') return htmlspecialchars($texto);
+          return preg_replace('/(' . preg_quote(htmlspecialchars($busq), '/') . ')/i', '<mark>$1</mark>', htmlspecialchars($texto));
+        }
+
         $i = 1;
         while ($row = pg_fetch_assoc($result)):
-          // Iniciales para avatar
           $iniciales = strtoupper(substr($row['nombre'], 0, 1) . substr($row['apellido'], 0, 1));
-
-          // Función para resaltar búsqueda
-          function resaltar($texto, $busq) {
-            if ($busq === '') return htmlspecialchars($texto);
-            return preg_replace('/(' . preg_quote(htmlspecialchars($busq), '/') . ')/i', '<mark>$1</mark>', htmlspecialchars($texto));
-          }
         ?>
         <tr>
           <td style="color:var(--muted); font-family:'Space Mono',monospace; font-size:.75rem;"><?= $i++ ?></td>
