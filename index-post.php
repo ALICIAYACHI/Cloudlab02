@@ -13,7 +13,7 @@ if (empty($doc) || empty($nom) || empty($ape)) {
     die("Error: Documento, Nombre y Apellidos son obligatorios.");
 }
 
-$sql = "INSERT INTO persona VALUES(default,'$doc','$nom','$ape','$dir','$cel')";
+$sql = "INSERT INTO persona(documento,nombre,apellido,direccion,celular) VALUES('$doc','$nom','$ape','$dir','$cel')";
 $result = pg_query($con, $sql);
 
 if (!$result) {

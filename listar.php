@@ -7,13 +7,14 @@ $busqueda = isset($_GET['buscar']) ? pg_escape_string($con, $_GET['buscar']) : '
 
 if ($busqueda !== '') {
     $sql = "SELECT * FROM persona WHERE 
-            doc ILIKE '%$busqueda%' OR 
-            nom ILIKE '%$busqueda%' OR 
-            ape ILIKE '%$busqueda%' OR 
-            dir ILIKE '%$busqueda%' OR 
-            cel ILIKE '%$busqueda%'";
+            documento ILIKE '%$busqueda%' OR 
+            nombre ILIKE '%$busqueda%' OR 
+            apellido ILIKE '%$busqueda%' OR 
+            direccion ILIKE '%$busqueda%' OR 
+            celular ILIKE '%$busqueda%'
+            ORDER BY idpersona ASC";
 } else {
-    $sql = "SELECT * FROM persona";
+    $sql = "SELECT * FROM persona ORDER BY idpersona ASC";
 }
 
 $result = pg_query($con, $sql);
@@ -415,7 +416,7 @@ $total = pg_num_rows($result);
         $i = 1;
         while ($row = pg_fetch_assoc($result)):
           // Iniciales para avatar
-          $iniciales = strtoupper(substr($row['nom'], 0, 1) . substr($row['ape'], 0, 1));
+          $iniciales = strtoupper(substr($row['nombre'], 0, 1) . substr($row['apellido'], 0, 1));
 
           // Función para resaltar búsqueda
           function resaltar($texto, $busq) {
@@ -425,18 +426,18 @@ $total = pg_num_rows($result);
         ?>
         <tr>
           <td style="color:var(--muted); font-family:'Space Mono',monospace; font-size:.75rem;"><?= $i++ ?></td>
-          <td><span class="badge-doc"><?= resaltar($row['doc'], $busqueda) ?></span></td>
+          <td><span class="badge-doc"><?= resaltar($row['documento'], $busqueda) ?></span></td>
           <td>
             <div class="name-cell">
               <div class="avatar"><?= $iniciales ?></div>
-              <span><?= resaltar($row['nom'] . ' ' . $row['ape'], $busqueda) ?></span>
+              <span><?= resaltar($row['nombre'] . ' ' . $row['apellido'], $busqueda) ?></span>
             </div>
           </td>
-          <td style="color:var(--muted);"><?= resaltar($row['dir'], $busqueda) ?></td>
-          <td><?= resaltar($row['cel'], $busqueda) ?></td>
+          <td style="color:var(--muted);"><?= resaltar($row['direccion'], $busqueda) ?></td>
+          <td><?= resaltar($row['celular'], $busqueda) ?></td>
           <td>
-            <a href="actualizar.php?id=<?= $row['id'] ?>" class="action-btn btn-edit">✏️ Editar</a>
-            <a href="eliminar.php?id=<?= $row['id'] ?>" class="action-btn btn-del" onclick="return confirm('¿Eliminar a <?= htmlspecialchars($row['nom']) ?>?')">🗑️ Eliminar</a>
+            <a href="actualizar.php?id=<?= $row['idpersona'] ?>" class="action-btn btn-edit">✏️ Editar</a>
+            <a href="eliminar.php?id=<?= $row['idpersona'] ?>" class="action-btn btn-del" onclick="return confirm('¿Eliminar a <?= htmlspecialchars($row['nombre']) ?>?')">🗑️ Eliminar</a>
           </td>
         </tr>
         <?php endwhile; ?>
